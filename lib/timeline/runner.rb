@@ -21,7 +21,10 @@ module Timeline
           result = match[1] if match && match.length > 0
         end
 
-        results << [commit, result]
+        subject = "\"#{`git show -s --format="%s"`.strip}\""
+        timestamp = `git show -s --format="%ct"`.to_i
+        time = Time.at(timestamp).utc.strftime("%Y-%m-%d %H:%M:%S")
+        results << [time, result, subject, commit]
       end
 
       lines = results.map { |line| line.join(",") }.join("\n")
