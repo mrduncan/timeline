@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+# Borrowed from mojombo/ronn
+begin
+  require 'timeline'
+rescue LoadError => boom
+  if boom.to_s =~ /timeline/
+    libdir = File.expand_path("../../lib", __FILE__).sub(%r|^#{Dir.pwd}/|, './')
+    if File.directory?(libdir) && !$:.include?(libdir)
+#      warn "warn: #{boom}. adding #{libdir} to RUBYLIB ..."
+      $:.unshift libdir
+      retry
+    end
+  elsif !defined?(Gem)
+#    warn "warn: #{boom}. loading rubygems ..."
+    require 'rubygems'
+    retry
+  end
+  abort boom.to_s
+end
+
+options = {}
+ARGV.options do |opts|
+  opts.banner = "Usage: timeline [options] command"
+
+  opts.on("-o", "--output FILE", "Specify the output file name") do |file|
+    options[:output] = file
+  end
+  opts.on("-f", "--filter FILTER", "Specify the regular expression to filter the output with") do |filter|
+    options[:filter] = filter
+  end
+  opts.on("-r", "--revisions REVISIONS", "The git revisions to use (<since>..<until>)") do |revisions|
+    options[:revisions] = revisions
+  end
+  opts.on("-n", "--number NUMBER", "Limit the number of revisions to show") do |limit|
+    options[:limit] = limit
+  end
+  opts.on("-b", "--branch BRANCH", "The git branch") do |branch|
+    options[:branch] = branch
+  end
+  opts.on("-v", "--version", "Print the version number") do
+    puts Timeline::VERSION
+    exit
+  end
+  opts.on("-h", "--help", "Display this help message") do
+    puts opts
+    exit
+  end
+
+  opts.parse!
+end
+
+options[:command] = ARGV.shift
+if options[:command]
+  Timeline::Runner.new(options).execute
+else
+  puts ARGV.options
+end
