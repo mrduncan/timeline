@@ -27,6 +27,9 @@ module Timeline
         results << [time, result, subject, commit]
       end
 
+      # Return to the branch
+      `git checkout -q #{@options[:branch] || "master"}`
+
       lines = results.map { |line| line.join(",") }.join("\n")
       if @options[:output]
         File.open(@options[:output], "w") { |f| f.write(lines) }
