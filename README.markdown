@@ -7,6 +7,24 @@ repositories.
 Timeline is inspired by Jacob Kristhammar and Rickard Böttcher's work on
 [Tornado][0]
 
+Usage
+-----
+
+    Usage: timeline [options] command
+        -o, --output FILE                Specify the output file name
+        -f, --filter FILTER              Specify the regular expression to filter the output with
+        -r, --revisions REVISIONS        The git revisions to use (<since>..<until>)
+        -n, --number NUMBER              Limit the number of revisions to show
+        -b, --branch BRANCH              The git branch
+        -v, --version                    Print the version number
+        -h, --help                       Display this help message
+
+Examples
+--------
+How have line counts changed over time?
+
+    timeline -f "\d+" "wc -l index.html"
+
 Contributing
 ------------
 
