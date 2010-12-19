@@ -2,7 +2,8 @@ Timeline
 ========
 
 Timeline is a command line tool for generating timeline data from git
-repositories.
+repositories. It is still very much a work in progress - I'd love to hear your
+thoughts on how it could be better.
 
 Timeline is inspired by Jacob Kristhammar and Rickard Böttcher's work on
 [Tornado][0]
